@@ -120,4 +120,4 @@ This project is licensed under the ISC License.
 
 ## Author
 
-- Created with 🤍 by WeatherMama
+- Created with 🤍 by WeatherMama and [Shashi Bhushan](https://github.com/shashibhushan21 "Shashi Bhushan")
