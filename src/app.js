@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const hbs = require('hbs');
+require('dotenv').config();
 const app = express();
 const port = process.env.PORT || 80;
 
@@ -13,10 +14,14 @@ app.set("view engine", "hbs");
 app.set("views", templatePath);
 hbs.registerPartials(partialsPath);
 
-
 app.use(express.static(staticPath));
 
- 
+// API endpoint to provide the API key
+app.get("/api/config", (req, res) => {
+  res.json({
+    apiKey: process.env.OPENWEATHER_API_KEY
+  });
+});
 
 app.get("/", (req, res) => {
   res.render("index");

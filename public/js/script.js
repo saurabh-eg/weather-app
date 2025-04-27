@@ -1,7 +1,7 @@
 let cityInput = document.getElementById('city_input'),
 searchBtn = document.getElementById('searchBtn'),
 locationcBtn = document.getElementById('locationBtn'),
-api_key = '30fc2ac4c4d8df9fc5e02e4f6dcaf3f6';
+api_key;
 currentWeatherCard =  document.querySelectorAll('.weather-left .card')[0];
 fiveDaysForecastCard =  document.querySelector('.day-forecast');
 aqiCard = document.querySelectorAll('.highlights .card')[0];
@@ -13,14 +13,26 @@ windSpeedVal = document.getElementById('windSpeedVal'),
 feelsVal = document.getElementById('feelsVal'),
 hourlyForecastCard = document.querySelector('.hourly-forecast');
 
-
-
-
 aqiList = [ 'Good', 'Fair',  'Moderate', 'Poor', 'Very Poor'];
 
-
+// Fetch API key from backend
+fetch('/api/config')
+    .then(res => res.json())
+    .then(config => {
+        api_key = config.apiKey;
+        // Initial weather fetch on page load
+        window.dispatchEvent(new Event('load'));
+    })
+    .catch(err => {
+        console.error('Failed to fetch API key:', err);
+        alert('Failed to initialize weather app');
+    });
 
 function getWeatherDetails(name, lat, lon, state,country){
+    if (!api_key) {
+        alert('Weather app not initialized yet');
+        return;
+    }
     let FORECAST_API_URL = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${api_key}`;
     let WEATHER_API_URL = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${api_key}`;
     let AIR_POLLUTION_API_URL = `https://api.openweathermap.org/data/2.5/air_pollution?lat=${lat}&lon=${lon}&appid=${api_key}`;
@@ -257,9 +269,6 @@ cityInput.addEventListener('keyup', e => {
         searchBtn.click(); 
     }
 });
-
-
-
 
 searchBtn.addEventListener('click', getCityCoordinates);
 locationcBtn.addEventListener('click', getUserCoordinates);
